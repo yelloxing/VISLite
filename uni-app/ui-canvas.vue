@@ -1,50 +1,26 @@
 <template>
   <view :class="cover || isH5 ? 'cover-view' : 'normal-view'">
     <view :class="'view-img view-' + uniqueid" @touchstart="doitstart">
-      <image
-        :style="{ width: width + 'px', height: height + 'px' }"
-        :src="viewImg"
-      ></image>
+      <image :style="{ width: width + 'px', height: height + 'px' }" :src="viewImg"></image>
     </view>
 
     <!-- #ifdef MP-ALIPAY -->
-    <canvas
-      class="painter"
-      :id="'painter-' + uniqueid"
-      @touchstart="doitstart"
-      :style="{ width: width + 'px', height: height + 'px' }"
-    ></canvas>
-    <canvas
-      class="region"
-      :id="'region-' + uniqueid"
-      :style="{ width: width + 'px', height: height + 'px' }"
-    ></canvas>
+    <canvas class="painter" :id="'painter-' + uniqueid" @touchstart="doitstart"
+      :style="{ width: width + 'px', height: height + 'px' }"></canvas>
+    <canvas v-if="region" class="region" :id="'region-' + uniqueid"
+      :style="{ width: width + 'px', height: height + 'px' }"></canvas>
     <!-- #endif -->
     <!-- #ifdef MP-WEIXIN -->
-    <canvas
-      class="painter"
-      canvas-id="painter"
-      @touchstart="doitstart"
-      :style="{ width: width + 'px', height: height + 'px' }"
-    ></canvas>
-    <canvas
-      class="region"
-      canvas-id="region"
-      :style="{ width: width + 'px', height: height + 'px' }"
-    ></canvas>
+    <canvas class="painter" canvas-id="painter" @touchstart="doitstart"
+      :style="{ width: width + 'px', height: height + 'px' }"></canvas>
+    <canvas v-if="region" class="region" canvas-id="region"
+      :style="{ width: width + 'px', height: height + 'px' }"></canvas>
     <!-- #endif -->
     <!-- #ifndef MP-WEIXIN||MP-ALIPAY -->
-    <canvas
-      class="painter"
-      :canvas-id="'painter-' + uniqueid"
-      @touchstart="doitstart"
-      :style="{ width: width + 'px', height: height + 'px' }"
-    ></canvas>
-    <canvas
-      class="region"
-      :canvas-id="'region-' + uniqueid"
-      :style="{ width: width + 'px', height: height + 'px' }"
-    ></canvas>
+    <canvas class="painter" :canvas-id="'painter-' + uniqueid" @touchstart="doitstart"
+      :style="{ width: width + 'px', height: height + 'px' }"></canvas>
+    <canvas v-if="region" class="region" :canvas-id="'region-' + uniqueid"
+      :style="{ width: width + 'px', height: height + 'px' }"></canvas>
     <!-- #endif -->
   </view>
 </template>
@@ -75,9 +51,13 @@ export default {
     },
     touchstart: {
       type: Function,
-      default: () => {},
+      default: () => { },
     },
     cover: {
+      type: Boolean,
+      default: true,
+    },
+    region: {
       type: Boolean,
       default: true,
     },
@@ -87,13 +67,13 @@ export default {
       let painter, region, painterid, regionid;
       // #ifdef MP-WEIXIN
       painter = uni.createCanvasContext("painter", this);
-      region = uni.createCanvasContext("region", this);
+      if (this.region) region = uni.createCanvasContext("region", this);
       painterid = "painter";
       regionid = "region";
       // #endif
       // #ifndef MP-WEIXIN
       painter = uni.createCanvasContext("painter-" + this.uniqueid, this);
-      region = uni.createCanvasContext("region-" + this.uniqueid, this);
+      if (this.region) region = uni.createCanvasContext("region-" + this.uniqueid, this);
       painterid = "painter-" + this.uniqueid;
       regionid = "region-" + this.uniqueid;
       // #endif
@@ -105,7 +85,7 @@ export default {
             return painter;
           },
         },
-        {
+        _this.region ? {
           getContext() {
             // #ifdef MP-ALIPAY
             let getImageData = region.getImageData;
@@ -136,24 +116,30 @@ export default {
             };
             return region;
           },
-        }
+        } : null
       );
-      this.help.instance.draw = () => {
-        painter.draw();
-        region.draw();
+      this.help.instance.draw = (reserve = false, callback = () => { }) => {
+        painter.draw(reserve, () => {
 
-        // 如果不使用原生渲染
-        if (!this.cover && !this.isH5) {
-          uni.canvasToTempFilePath(
-            {
-              canvasId: painterid,
-              success: (e) => {
-                this.viewImg = e.tempFilePath;
+          // 如果不使用原生渲染
+          if (!this.cover && !this.isH5) {
+            uni.canvasToTempFilePath(
+              {
+                canvasId: painterid,
+                success: (e) => {
+                  this.viewImg = e.tempFilePath;
+                  if (_this.region) region.draw(reserve);
+                  callback();
+                },
               },
-            },
-            this
-          );
-        }
+              this
+            );
+          } else {
+            if (_this.region) region.draw(reserve);
+            callback();
+          }
+        });
+
       };
       return new Promise((resolve, reject) => {
         this.help.instance.toDataURL = () => {

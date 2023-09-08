@@ -1,9 +1,52 @@
-let el1 = document.getElementById("root1")
-
 import WebGL from '../../src/WebGL'
 import viewHandler from '../../src/viewHandler'
 
-let painter1 = new WebGL(el1)
+import type { geometryType } from '../../types/Object3D'
+
+let el0 = document.getElementById("root0")
+
+let painter0 = new WebGL(el0)
+painter0.render({
+    mesh: [{
+        geometry: {
+            attributes: {
+                position: {
+                    array: [
+                        1, -1,
+                        -1, -1,
+                        0, 1
+                    ],
+                    count: 3,
+                    itemSize: 2
+                }
+            },
+            type: "TRIANGLES"
+        },
+        material: {
+            // color: {
+            //     r: 1,
+            //     g: 0,
+            //     b: 1,
+            //     alpha: 1
+            // }
+            colors: {
+                array: [
+                    1, 0, 0,
+                    0, 1, 0,
+                    0, 0, 1
+                ],
+                count: 3,
+                itemSize: 3
+            }
+        }
+    }]
+})
+
+let el1 = document.getElementById("root1")
+
+let painter1 = new WebGL(el1, {
+    region: true
+})
 
 let image0 = new Image();
 image0.onload = function () {
@@ -286,7 +329,9 @@ image0.src = "../../docs/images/github.png"
 
 var el2 = document.getElementById("root2");
 
-var painter2 = new WebGL(el2);
+var painter2 = new WebGL(el2, {
+    region: false
+});
 
 var boxGeometry = function (x, y, z, xsize, ysize, zsize) {
     var dx = xsize * 0.5, dy = ysize * 0.5, dz = zsize * 0.5;
@@ -318,7 +363,7 @@ var boxGeometry = function (x, y, z, xsize, ysize, zsize) {
             count: 36,
             itemSize: 1
         },
-        type: "TRIANGLES"
+        type: <geometryType>"TRIANGLES"
     }
 };
 
@@ -351,7 +396,7 @@ let rectGeometry = function (x: number, y: number, z: number, xsize: number, zsi
             count: 6,
             itemSize: 1
         },
-        type: "TRIANGLES"
+        type: <geometryType>"TRIANGLES"
     }
 };
 

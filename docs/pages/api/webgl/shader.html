@@ -1,0 +1,143 @@
+<header>
+    着色器
+</header>
+<div class="version">
+    0.3.0 新增
+</div>
+<h2>
+    引入
+</h2>
+<pre tag="javascript">
+    import { Shader } from 'vislite'
+</pre>
+<h2>
+    语法
+</h2>
+<p>
+    传递一个WebGLRenderingContext类型的参数painter即可获取着色器实例：
+</p>
+<pre tag="javascript">
+let shader = new Shader(painter)
+</pre>
+<h2>
+    属性
+</h2>
+<h3>
+    program
+</h3>
+<p>
+    着色器程序。
+</p>
+<h2>
+    方法
+</h2>
+<h3>
+    use
+</h3>
+<p>
+    使得当前的着色器程序启用：
+</p>
+<pre tag="javascript">
+    shader.use()
+</pre>
+<div class="warn">
+    温馨提示：需要在编译compile完成后再调用这个方法。
+</div>
+<h3>
+    compile
+</h3>
+<p>
+    编译具体的着色器程序，需要传递的是两个参数，分别是顶点着色器和片段（元）着色器的字符串代码：
+</p>
+<pre tag="javascript">
+    shader.compile(vshaderSource, fshaderSource)
+</pre>
+<h4>
+    内置程序
+</h4>
+<p>
+    此外，你还可以使用内置定义好的着色器程序，语法如下：
+</p>
+<pre tag="javascript">
+    shader.compile(shaderName)
+</pre>
+<div class="version">
+    0.4.1 新增
+</div>
+<p>
+    那具体有哪些内置的着色器，下面一一说明：
+</p>
+<h5>
+    color
+</h5>
+<p>
+    可以绘制单一颜色物体：
+</p>
+<ul>
+    <li>
+        u_matrix：<span class="special">uniform mat4</span>类型，用于设置物体变换矩阵；
+    </li>
+    <li>
+        u_color：<span class="special">uniform vec4</span>类型，用于设置物体颜色；
+    </li>
+    <li>
+        a_position：<span class="special">attribute vec4</span>类型，用于设置物体点的位置。
+    </li>
+</ul>
+<h5>
+    colors
+</h5>
+<p>
+    可以绘制每个点独立设置颜色的物体：
+</p>
+<ul>
+    <li>
+        u_matrix：<span class="special">uniform mat4</span>类型，用于设置物体变换矩阵；
+    </li>
+    <li>
+        a_color：<span class="special">attribute vec4</span>类型，用于设置物体颜色；
+    </li>
+    <li>
+        a_position：<span class="special">attribute vec4</span>类型，用于设置物体点的位置。
+    </li>
+</ul>
+<h5>
+    image
+</h5>
+<p>
+    可以使用纹理图片贴在物体表面：
+</p>
+<ul>
+    <li>
+        u_matrix：<span class="special">uniform mat4</span>类型，用于设置物体变换矩阵；
+    </li>
+    <li>
+        a_textcoord：<span class="special">attribute vec2</span>类型，用于设置UV纹理坐标；
+    </li>
+    <li>
+        u_sampler：<span class="special">uniform sampler2D</span>类型，用于设置纹理单元；
+    </li>
+    <li>
+        a_position：<span class="special">attribute vec4</span>类型，用于设置物体点的位置。
+    </li>
+</ul>
+<h5>
+    cube
+</h5>
+<p>
+    可以使用立法纹理贴在物体表面：
+</p>
+<ul>
+    <li>
+        u_matrix：<span class="special">uniform mat4</span>类型，用于设置物体变换矩阵；
+    </li>
+    <li>
+        a_normal：<span class="special">attribute vec4</span>类型，用于设置物体的法向量；
+    </li>
+    <li>
+        u_texture：<span class="special">uniform samplerCube</span>类型，用于设置纹理单元；
+    </li>
+    <li>
+        a_position：<span class="special">attribute vec4</span>类型，用于设置物体点的位置。
+    </li>
+</ul>

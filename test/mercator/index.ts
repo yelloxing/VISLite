@@ -3,7 +3,7 @@ let el = document.getElementById("root")
 import Canvas from '../../src/Canvas'
 import Mercator from '../../src/Mercator'
 
-fetch("../data/中华人民共和国.json", {
+fetch("/docs/data/china.json", {
     method: "GET"
 }).then(res => {
     if (res.status === 200) {
@@ -34,6 +34,8 @@ fetch("../data/中华人民共和国.json", {
     }
 
     for (let i = 0; i < res.features.length; i++) {
+        painter.setRegion(res.features[i].properties.name)
+
         for (let j = 0; j < res.features[i].geometry.coordinates.length; j++) {
             if (res.features[i].geometry.type == "Polygon") {
                 drawPolygon(res.features[i].geometry.coordinates)
@@ -44,6 +46,12 @@ fetch("../data/中华人民共和国.json", {
             }
         }
     }
+
+    el.addEventListener("click", (event) => {
+        painter.getRegion(event.offsetX, event.offsetY).then((data) => {
+            console.log(data)
+        })
+    })
 
 }).catch(err => {
     console.error(err)
