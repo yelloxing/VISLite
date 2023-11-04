@@ -3,6 +3,8 @@ import HermiteType from './Hermite'
 
 import Matrix4Type from './Matrix4'
 import rotateType from './rotate'
+import moveType from './move'
+import scaleType from './scale'
 
 import getLoopColorsType from './getLoopColors'
 import formatColorType from './formatColor'
@@ -29,6 +31,9 @@ import resizeObserverType from './resizeObserver'
 
 import TreeLayoutType from './TreeLayout'
 import TreeConfigType from './TreeConfig'
+
+import GeometryType from './Geometry'
+import GeometryOptionType from './GeometryOption'
 
 // 插值
 interface NewCardinalType extends CardinalType {
@@ -78,6 +83,11 @@ interface NewTreeLayoutType extends TreeLayoutType {
     new(config?: TreeConfigType): this
 }
 
+// 几何&模型数据
+interface NewGeometryType extends GeometryType {
+    new(option?: GeometryOptionType): this
+}
+
 export default class VISLite {
 
     // 插值
@@ -87,6 +97,8 @@ export default class VISLite {
     // 变换
     static Matrix4: NewMatrix4Type
     static rotate: rotateType
+    static move: moveType
+    static scale: scaleType
 
     // 工具
     static getLoopColors: getLoopColorsType
@@ -116,6 +128,9 @@ export default class VISLite {
 
     // 布局
     static TreeLayout: NewTreeLayoutType
+
+    // 几何&模型数据
+    static Geometry: NewGeometryType
 }
 
 // 插值
@@ -125,6 +140,8 @@ export let Hermite: NewHermiteType
 // 变换
 export let Matrix4: NewMatrix4Type
 export let rotate: rotateType
+export let move: moveType
+export let scale: scaleType
 
 // 工具
 export let getLoopColors: getLoopColorsType
@@ -154,3 +171,6 @@ export let resizeObserver: resizeObserverType
 
 // 布局
 export let TreeLayout: NewTreeLayoutType
+
+// 几何&模型数据
+export let Geometry: NewGeometryType
