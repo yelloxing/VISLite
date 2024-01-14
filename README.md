@@ -15,6 +15,9 @@
     <a href="https://github.com/oi-contrib/VISLite" target='_blank'>
         <img alt="GitHub repo stars" src="https://img.shields.io/github/stars/oi-contrib/VISLite?style=social">
     </a>
+     <a href="https://gitee.com/oi-contrib/VISLite" target='_blank'>
+        <img alt="Gitee repo stars" src="https://gitee.com/oi-contrib/VISLite/badge/star.svg?theme=dark">
+    </a>
 </p>
 
 # VISLite
@@ -33,7 +36,7 @@
 
 我们通过提供可视化常用的算法来帮助你绘制复杂图表。比如下面的树图，通过简单的配置就可以把任意格式的数据变成任意绘制的带坐标的数据：
 
-<img src="https://oi-contrib.github.io/VISLite/images/docs/what_1.png" width="400" height="300"/>
+<img src="https://oi-contrib.github.io/VISLite/images/docs/what_1.png" width="400"/>
 
 > 上述例子的运行地址：[从左到右树状图](https://oi-contrib.github.io/VISLite/#/example/canvas/tree-layout-lr)。
 
@@ -43,17 +46,33 @@
 
 我们对画笔进行了加强，使得其更简单好用。比如canvas、webgl，抽象出区域的概念，使得无论你绘制的图形多么的不规则，都可以很轻松的实现交互功能：
 
-<img src="https://oi-contrib.github.io/VISLite/images/docs/what_2.png" width="400" height="300"/>
+<img src="https://oi-contrib.github.io/VISLite/images/docs/what_2.png" width="400"/>
 
 > 上述例子的运行地址：[中国地图](https://oi-contrib.github.io/VISLite/#/example/canvas/china)。
 
 画笔除了像上面那样为了方便交互而补充区域的设计外，还对原来的API进行了一次抽象，使得API更友好简单```（比如WebGL，即使不会3D的人也可以轻松使用，而SVG的使用，你无需去记忆那些晦涩难懂的属性）```，同时，我们还抹平了不同版本浏览器等之间的差异。
 
+### 数据驱动的3D
+
+通过一个简单```立方体JSON```表达立方体意图，从而快速实现3D图表开发：
+
+<img src="https://oi-contrib.github.io/VISLite/images/docs/ring-simple.png" width="400"/>
+
+> 上述例子的运行地址：[环图](https://oi-contrib.github.io/VISLite/#/example/webgl/ring-simple)。
+
+### 立方体运算
+
+借助我们提供的[立方体运算](https://oi-contrib.github.io/VISLite/#/api/geometry)就可以快速获得常见的立方体的```立方体JSON```数据：
+
+<img src="https://oi-contrib.github.io/VISLite/images/docs/H2O.png" width="400"/>
+
+> 上述例子的运行地址：[水分子式H2O](https://oi-contrib.github.io/VISLite/#/example/webgl/H2O)。
+
 ### 支持跨端开发
 
 除了Web端外，我们还针对uni-app、微信小程序等端进行了支持，并且不同端API保持一致，大大提高了代码的复用性：
 
-<img src="https://oi-contrib.github.io/VISLite/images/docs/what_3.png" width="600" height="300"/>
+<img src="https://oi-contrib.github.io/VISLite/images/docs/what_3.png" width="600"/>
 
 > 上述例子的运行地址：[金额波浪球](https://oi-contrib.github.io/VISLite/#/example/svg/money-schedule)。
 
@@ -63,7 +82,7 @@
 
 当然，按照业务和UI设计，快速开发一个大屏也是相对容易的：
 
-<img src="https://oi-contrib.github.io/VISLite/images/docs/bigview.jpeg" width="500"/>
+<img src="https://oi-contrib.github.io/VISLite/images/docs/bigview.jpeg" width="700"/>
 
 > 上述例子的运行地址：[数据看板大屏](https://oi-contrib.github.io/VISLite/#/bigview?page=databoard)。
 
@@ -74,7 +93,7 @@
 - 简单与复杂共存：一方面我们提供了可视化需要的基础功能，你可以按照自己的需要组合使用；另一方面，为了加速开发，我们针对常见的可视化业务场景进行了封装，可以帮助你快速完成，你可以根据实际情况进行选择。
 - 向下兼容：我们向你保证，始终向下兼容```（alpha和beta版本为测试版本，不包括）```，因此，无论何时，最新版本总是最好的选择。
 
-> 版本说明：alpha为开发阶段、beta为发布前测试、无后缀的为正式版本。
+> 版本说明：alpha为开发阶段、beta为发布前测试、rc为候选版本、无后缀的为正式版本。
 
 ## 需求墙
 
