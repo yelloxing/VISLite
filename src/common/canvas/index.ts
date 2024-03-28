@@ -6,41 +6,34 @@ import assemble from "../assemble"
 import { linearGradient, radialGradient } from "./gradient"
 import { initText } from './config'
 
-// 属性名向下兼容
-const oldAttrName = {
-    "font-size": "fontSize",
-    "font-family": "fontFamily",
-    "font-weight": "fontWeight",
-    "font-style": "fontStyle",
-    "arc-start-cap": "arcStartCap",
-    "arc-end-cap": "arcEndCap",
-}
-
 class Canvas extends PainterRender {
     readonly name: string = "Canvas"
 
     private __regionList = {} //区域映射表
+    private __scaleSize
 
     // 步长由1改为10是为了优化区域计算有时候出错问题
     // 2023年7月6日 于南京
     private __regionAssemble = assemble(0, 255, 10, 3)
 
-    constructor(ViewCanvas: HTMLCanvasElement, RegionCanvas: HTMLCanvasElement | null, opts: CanvasOptsType = {}) {
+    // 添加scaleSize参数是为了适配画布缩放后的处理
+    // 2024年1月17日 于南京
+    constructor(ViewCanvas: HTMLCanvasElement, RegionCanvas: HTMLCanvasElement | null, opts: CanvasOptsType = {}, scaleSize = 1) {
         super(
             ViewCanvas,
             opts,
             RegionCanvas ? new PainterRender(RegionCanvas, {
                 willReadFrequently: true,
-            }) : undefined, true
+            }) : undefined, true, scaleSize
         )
 
+        this.__scaleSize = scaleSize
         this.setRegion("")
     }
 
     config(configs: CanvasConfigType) {
         for (const key in configs) {
-            const _key = oldAttrName[key] || key
-            this.useConfig(_key, configs[key])
+            this.useConfig(key, configs[key])
         }
 
         return this
@@ -142,8 +135,8 @@ class Canvas extends PainterRender {
     // 获取画布信息
     getInfo() {
         return {
-            width: this.painter.canvas.width,
-            height: this.painter.canvas.height
+            width: this.painter.canvas.width / this.__scaleSize,
+            height: this.painter.canvas.height / this.__scaleSize
         }
     }
 
@@ -159,6 +152,8 @@ class Canvas extends PainterRender {
 
     // 获取指定位置颜色
     getColor(x: number, y: number) {
+        x *= this.__scaleSize
+        y *= this.__scaleSize
         const currentRGBA = this.painter.getImageData(x - 0.5, y - 0.5, 1, 1).data
         return (
             "rgba(" +

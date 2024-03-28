@@ -1,6 +1,13 @@
 <template>
-  <view :class="cover || isH5 ? 'cover-view' : 'normal-view'" :style="{ display: 'inline-block' }">
-    <view v-if="!cover && !isH5" :class="'view-img view-' + uniqueid" @touchstart="doitstart">
+  <view
+    :class="cover || isH5 ? 'cover-view' : 'normal-view'"
+    :style="{ display: 'inline-block' }"
+  >
+    <view
+      v-if="!cover && !isH5"
+      :class="'view-img view-' + uniqueid"
+      @touchstart="doitstart"
+    >
       <image
         :style="{ width: width + 'px', height: height + 'px' }"
         :src="viewImg"
@@ -9,16 +16,26 @@
 
     <!-- #ifdef MP-ALIPAY -->
     <canvas
+      :width="2 * width + 'px'"
+      :height="2 * height + 'px'"
       class="painter"
       :id="'painter-' + uniqueid"
       @touchstart="doitstart"
-      :style="[{ width: width + 'px', height: height + 'px'}, cover || isH5 ? {} : {position: 'fixed', left: '50000px'}]"
+      :style="[
+        { width: width + 'px', height: height + 'px' },
+        cover || isH5 ? {} : { position: 'fixed', left: '50000px' },
+      ]"
     ></canvas>
     <canvas
       v-if="region"
       class="region"
       :id="'region-' + uniqueid"
-      :style="{ width: width + 'px', height: height + 'px', position: 'fixed', left: '50000px' }"
+      :style="{
+        width: width + 'px',
+        height: height + 'px',
+        position: 'fixed',
+        left: '50000px',
+      }"
     ></canvas>
     <!-- #endif -->
     <!-- #ifdef MP-WEIXIN -->
@@ -26,13 +43,21 @@
       class="painter"
       canvas-id="painter"
       @touchstart="doitstart"
-      :style="[{ width: width + 'px', height: height + 'px'}, cover || isH5 ? {} : {position: 'fixed', left: '50000px'}]"
+      :style="[
+        { width: width + 'px', height: height + 'px' },
+        cover || isH5 ? {} : { position: 'fixed', left: '50000px' },
+      ]"
     ></canvas>
     <canvas
       v-if="region"
       class="region"
       canvas-id="region"
-      :style="{ width: width + 'px', height: height + 'px', position: 'fixed', left: '50000px' }"
+      :style="{
+        width: width + 'px',
+        height: height + 'px',
+        position: 'fixed',
+        left: '50000px',
+      }"
     ></canvas>
     <!-- #endif -->
     <!-- #ifndef MP-WEIXIN||MP-ALIPAY -->
@@ -40,19 +65,28 @@
       class="painter"
       :canvas-id="'painter-' + uniqueid"
       @touchstart="doitstart"
-      :style="[{ width: width + 'px', height: height + 'px'}, cover || isH5 ? {} : {position: 'fixed', left: '50000px'}]"
+      :style="[
+        { width: width + 'px', height: height + 'px' },
+        cover || isH5 ? {} : { position: 'fixed', left: '50000px' },
+      ]"
     ></canvas>
     <canvas
       v-if="region"
       class="region"
       :canvas-id="'region-' + uniqueid"
-      :style="{ width: width + 'px', height: height + 'px', position: 'fixed', left: '50000px' }"
+      :style="{
+        width: width + 'px',
+        height: height + 'px',
+        position: 'fixed',
+        left: '50000px',
+      }"
     ></canvas>
     <!-- #endif -->
   </view>
 </template>
 <script>
-import OralCanvas from "../lib/OralCanvas/index.es.js";
+import { _Canvas as RawCanvas } from "../lib/index.umd.min.js";
+import drawImage from "./drawImage.js";
 export default {
   data() {
     return {
@@ -65,6 +99,7 @@ export default {
       // #ifndef H5
       isH5: false,
       // #endif
+      hadFetch:false
     };
   },
   props: {
@@ -75,10 +110,6 @@ export default {
     height: {
       type: Number,
       default: 150,
-    },
-    touchstart: {
-      type: Function,
-      default: () => {},
     },
     cover: {
       type: Boolean,
@@ -106,8 +137,18 @@ export default {
       regionid = "region-" + this.uniqueid;
       // #endif
 
+      // #ifdef MP-ALIPAY
+      if(!this.hadFetch) painter.scale(2, 2);
+      // #endif
+
+      let scaleSize = 1;
+
+      // #ifdef MP-ALIPAY
+      scaleSize = 2;
+      // #endif
+
       let _this = this;
-      this.help.instance = new OralCanvas(
+      this.help.instance = new RawCanvas(
         {
           getContext() {
             return painter;
@@ -146,7 +187,8 @@ export default {
                 return region;
               },
             }
-          : null
+          : null,
+        scaleSize
       );
       this.help.instance.draw = (reserve = false, callback = () => {}) => {
         painter.draw(reserve, () => {
@@ -171,6 +213,8 @@ export default {
           }
         });
       };
+
+      this.hadFetch = true;
       return new Promise((resolve, reject) => {
         this.help.instance.toDataURL = () => {
           return new Promise((resolveUrl) => {
@@ -188,15 +232,17 @@ export default {
           });
         };
 
+        this.help.instance.drawImage = drawImage(
+          this.help.instance,
+          this.help.instance.drawImage
+        );
+
         resolve(this.help.instance);
       });
     },
-    doit(event, doback) {
+    doit(event) {
       let doRun = (x, y) => {
         this.help.instance.getRegion(x, y).then((regionName) => {
-          // 兼容旧语法
-          if (typeof doback == "function") doback(regionName);
-
           this.$emit("dotouchstart", {
             name: regionName,
             x: x,
@@ -230,7 +276,7 @@ export default {
       }
     },
     doitstart(event) {
-      this.doit(event, this.touchstart);
+      this.doit(event);
     },
   },
 };
