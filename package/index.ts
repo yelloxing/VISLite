@@ -24,7 +24,14 @@ import Mercator from "./Mercator/index"
 
 import throttle from "./throttle/index"
 
+import MapCoordinate from "./MapCoordinate/index"
+
 import TreeLayout from "./TreeLayout/index"
+
+import initOption from "./initOption/index"
+import mergeOption from "./mergeOption/index"
+
+import assemble from "./assemble/index"
 
 export default {
 
@@ -60,7 +67,15 @@ export default {
 
     // 辅助
     throttle,
+    assemble,
+
+    // 坐标系
+    MapCoordinate,
 
     // 布局
-    TreeLayout
+    TreeLayout,
+
+    // 配置项
+    initOption,
+    mergeOption
 }

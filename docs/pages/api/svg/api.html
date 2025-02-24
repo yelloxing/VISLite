@@ -18,14 +18,20 @@ painter.config({
     // 线条宽度(单位px，下同)
     "lineWidth": 1,
 
+    // 线的端点类型，（"butt"平直边缘、"round"半圆和"square"矩形）（1.2.0 新增）
+    "lineCap": "butt",
+
+    // 线的拐角连接方式，（"miter"连接处边缘延长相接、"bevel"对角线斜角和"round"圆）（1.2.0 新增）
+    "lineJoin": "miter",
+
+    // 设置线条虚线，应该是一个数组[number,...]
+    "lineDash": [],
+
     // 文字水平对齐方式（"left"左对齐、"center"居中和"right"右对齐）
     "textAlign": 'left',
 
     // 文字垂直对齐方式（"middle"垂直居中、"top"上对齐和"bottom"下对齐）
     "textBaseline": 'middle',
-
-    // 设置线条虚线，应该是一个数组[number,...]
-    "lineDash": [],
 
     // 文字大小
     "fontSize": 16,
@@ -33,22 +39,16 @@ painter.config({
     // 字体，默认"sans-serif"
     "fontFamily": "sans-serif",
 
-    // 圆弧开始端闭合方式（"butt"直线闭合、"round"圆帽闭合、"-round"反圆帽闭合）
+    // 圆弧开始端闭合方式（"butt"直线闭合、"round"圆帽闭合和"-round"反圆帽闭合）（-round 0.3.0 新增）
     "arcStartCap": 'butt',
 
     // 圆弧结束端闭合方式，和上一个类似
-    "arcEndCap": 'butt'
+    "arcEndCap": 'butt',
+
+    // 矩形圆角半径（1.3.0 新增）
+    "rectRadius": Array&lt;number&gt;
 });
 </pre>
-<div class="version">
-    丰富日志
-    <hr />
-    <ul>
-        <li>
-            arcStartCap的-round 0.3.0 新增
-        </li>
-    </ul>
-</div>
 <h3>
     渐变色
 </h3>
@@ -105,6 +105,13 @@ painter.config({
 <p>
     如上面，我们给画笔设置填充色就是使用了我们刚刚获取的渐变色。
 </p>
+<h3>
+    重置
+</h3>
+<p>
+    对画笔的配置重置为默认值：
+</p>
+<pre tag="javascript">painter.reset()</pre>
 <h2>
     基础方法
 </h2>
@@ -226,6 +233,9 @@ painter.config({
 <p>
     基于路径可以绘制几乎大部分图形，非常类似画笔在纸上划动。
 </p>
+<h4>
+    基础
+</h4>
 <p>
     开始一段独立的路径：
 </p>
@@ -247,6 +257,21 @@ painter.config({
 </p>
 <pre tag="javascript">painter.arc(cx, cy, r, beginDeg, deg)</pre>
 <p>
+    把当前路径包裹的区域填充颜色：
+</p>
+<pre tag="javascript">painter.fill()</pre>
+<p>
+    把当前路径上色（轮廓线）：
+</p>
+<pre tag="javascript">painter.stroke()</pre>
+<p>
+    把当前路径画上轮廓线并填充颜色到当前路径所包裹的区域：
+</p>
+<pre tag="javascript">painter.full()</pre>
+<h4>
+    贝塞尔曲线
+</h4>
+<p>
     二次贝塞尔曲线到：
 </p>
 <pre tag="javascript">painter.quadraticCurveTo(cpx, cpy, x, y)</pre>
@@ -260,15 +285,3 @@ painter.config({
 <div class="warn">
     有两个控制点p(cp1x, cp1y)和p(cp2x, cp2y),画笔当前的位置和p(x, y)分别是起点和终点。
 </div>
-<p>
-    把当前路径包裹的区域填充颜色：
-</p>
-<pre tag="javascript">painter.fill()</pre>
-<p>
-    把当前路径上色（轮廓线）：
-</p>
-<pre tag="javascript">painter.stroke()</pre>
-<p>
-    把当前路径画上轮廓线并填充颜色到当前路径所包裹的区域：
-</p>
-<pre tag="javascript">painter.full()</pre>

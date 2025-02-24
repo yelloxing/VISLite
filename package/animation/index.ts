@@ -1,3 +1,3 @@
-import animation from "../../src/animation"
+import { animation } from "oipage/corejs/animation/index"
 
 export default animation

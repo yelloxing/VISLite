@@ -1,10 +1,10 @@
 import { initDefs } from './config'
 import { toNode, setAttribute } from "./tool"
 
-let enhanceGradient = function (gradient: SVGElement, gradientId: string) {
+const enhanceGradient = function (gradient: SVGElement, gradientId: string) {
     const enhanceGradient = {
         "value": function () {
-            return "url(#" + gradientId + ")";
+            return "url(#" + gradientId + ")"
         },
         "setColor": function (stop: number, color: string) {
 

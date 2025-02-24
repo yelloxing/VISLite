@@ -1,4 +1,4 @@
-let el = document.getElementById("root")
+const el = document.getElementById("root")
 
 import Canvas from "../../../src/Canvas"
 
@@ -55,14 +55,18 @@ painter
     .setRegion("蓝色的矩形")
     .fillRect(300, 100, 50, 200)
 
-el?.addEventListener("click", (event) => {
-    painter.getRegion(event.offsetX, event.offsetY).then((data) => {
-        console.log(data)
-    })
+// el?.addEventListener("click", (event) => {
+//     painter.getRegion(event.offsetX, event.offsetY).then((data) => {
+//         console.log(data)
+//     })
+// })
+
+painter.bind("click", (reginName: string) => {
+    console.log("当前区域:" + reginName)
 })
 
 // 多行文字
-let textH = painter
+const textH = painter
     .strokeRect(50, 250, 100, 100)
     .config({
         textAlign: "left",
@@ -84,10 +88,10 @@ painter.fillCircle(50, 250 + textH, 2)
 
 painter.setRegion("原生画笔")
 
-let ctx = painter.getContext()
+const ctx = painter.getContext()
 ctx?.fillRect(0, 0, 100, 50)
 
-let ctxRegion = painter.getContext(true)
+const ctxRegion = painter.getContext(true)
 ctxRegion?.fillRect(0, 0, 100, 50)
 
 // 渐变色
@@ -116,6 +120,21 @@ painter
     })
     .fillCircle(100, 100, 100)
 
+painter.setRegion("角度渐变")
+
+painter
+    .config({
+        fillStyle: painter
+            .createConicGradient(200, 200, 3.14, 5)
+            .setColor(0, "red")
+            .setColor(0.25, "pink")
+            .setColor(0.5, "blue")
+            .setColor(0.75, "yellow")
+            .setColor(1, "green")
+            .value(),
+    })
+    .fillCircle(200, 200, 100)
+
 painter
     .config({
         fillStyle: "red",
@@ -141,6 +160,22 @@ painter.config({
     strokeStyle: "red"
 }).strokeRect(300, 200, 300, 300)
 
-painter.setRegion("图片哦～").drawImage("/docs/images/logo.png", 300, 200, 300, 300).then(() => {
+painter.setRegion("图片哦～").drawImage("/docs/images/logo.png", 300, 200, 300, 100).then(() => {
     console.log("绘制完毕")
 })
+
+painter.setRegion("line设置").beginPath().config({
+    lineWidth: 20,
+    lineCap: "round",
+    lineJoin: "round",
+    lineDash: [10, 20]
+})
+    // .reset()
+    .moveTo(900, 600).lineTo(800, 500).lineTo(400, 650).stroke();
+
+painter.setRegion("圆角矩形").config({
+    rectRadius: [10, 20, 30, 50],
+    fillStyle: "pink"
+}).fullRect(50, 400, 300, 200);
+
+painter.clearCircle(200, 200, 30);

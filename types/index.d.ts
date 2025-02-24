@@ -1,3 +1,5 @@
+/// <reference path="./uni-canvas.d.ts" />
+
 import CardinalType from './Cardinal'
 import HermiteType from './Hermite'
 
@@ -23,9 +25,15 @@ import TextureType from './Texture'
 import MapType from './Map'
 
 import throttleType from './throttle'
+import assembleType from './assemble'
 
-import TreeLayoutType from './TreeLayout'
+import MapConfigType from './MapConfig'
+import MapCoordinateType from './MapCoordinate'
+
 import TreeConfigType from './TreeConfig'
+import TreeLayoutType from './TreeLayout'
+
+import { initOptionType, mergeOptionType } from './option'
 
 // 插值
 interface NewCardinalType extends CardinalType {
@@ -47,6 +55,9 @@ interface NewSVGType extends SVGType {
 interface NewCanvasType extends CanvasType {
     new(el: HTMLElement | null, option?: CanvasOptionType, width?: number, height?: number): this
 }
+interface NewRawCanvasType extends CanvasType {
+    new(canvas: any, region?: any, scaleSize?: number): this
+}
 
 // WebGL
 interface NewShaderType extends ShaderType {
@@ -65,6 +76,11 @@ interface NewEoapType extends MapType {
 }
 interface NewMercatorType extends MapType {
     new(scale?: number, center?: number[]): this
+}
+
+// 坐标系
+interface NewMapCoordinateType extends MapCoordinateType {
+    new(config?: MapConfigType): this
 }
 
 // 布局
@@ -92,6 +108,7 @@ export default class VISLite {
     // 画笔
     static SVG: NewSVGType
     static Canvas: NewCanvasType
+    static RawCanvas: NewRawCanvasType
 
     // WebGL
     static getWebGLContext: getWebGLContextType
@@ -105,9 +122,17 @@ export default class VISLite {
 
     // 辅助
     static throttle: throttleType
+    static assemble: assembleType
+
+    // 坐标系
+    static MapCoordinate: NewMapCoordinateType
 
     // 布局
     static TreeLayout: NewTreeLayoutType
+
+    // 配置项
+    static initOption: initOptionType
+    static mergeOption: mergeOptionType
 }
 
 // 插值
@@ -128,6 +153,7 @@ export let ruler: rulerType
 // 画笔
 export let SVG: NewSVGType
 export let Canvas: NewCanvasType
+export let RawCanvas: NewRawCanvasType
 
 // WebGL
 export let getWebGLContext: getWebGLContextType
@@ -141,6 +167,14 @@ export let Mercator: NewMercatorType
 
 // 辅助
 export let throttle: throttleType
+export let assemble: assembleType
+
+// 坐标系
+export let MapCoordinate: NewMapCoordinateType
 
 // 布局
 export let TreeLayout: NewTreeLayoutType
+
+// 配置项
+export let initOption: initOptionType
+export let mergeOption: mergeOptionType

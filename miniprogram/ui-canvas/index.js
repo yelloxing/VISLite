@@ -1,21 +1,23 @@
-import { RawCanvas } from "../../lib/index.umd.min.js";
+import RawCanvas from "../../lib/RawCanvas/index.es.min.js";
 import drawImage from "./drawImage.js";
 
 let dpr = wx.getSystemInfoSync().pixelRatio;
+
+// https://developers.weixin.qq.com/miniprogram/dev/reference/api/Component.html
 
 Component({
     properties: {
         width: {
             type: Number,
-            default: 300
+            value: 300
         },
         height: {
             type: Number,
-            default: 150
+            value: 150
         },
         region: {
             type: Boolean,
-            default: true
+            value: true
         }
     },
     data: {
